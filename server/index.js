@@ -1,10 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 
 const FoodModel = require("./models/Food");
 
 app.use(express.json());
+app.use(cors());
 
 mongoose.connect(
   "mongodb+srv://lukacc007:password12345@crud.h4tn6vq.mongodb.net/?retryWrites=true&w=majority",
@@ -13,8 +15,11 @@ mongoose.connect(
   }
 );
 
-app.get("/", async (req, res) => {
-  const food = new FoodModel({ foodName: "Apple", daysSinceIAte: 3 });
+app.post("/insert", async (req, res) => {
+  const foodName = req.body.foodName;
+  const days = req.body.days;
+
+  const food = new FoodModel({ foodName: foodName, daysSinceIAte: days });
 
   try {
     await food.save();
