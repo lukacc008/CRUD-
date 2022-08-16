@@ -32,12 +32,26 @@ app.post("/insert", async (req, res) => {
 app.get("/read", async (req, res) => {
   FoodModel.find({}, (err, result) => {
     if (err) {
-      res.send(err)
+      res.send(err);
     }
 
-   res.send(result);
+    res.send(result);
+  });
+});
 
-  })
+app.put("/update", async (req, res) => {
+  const newFoodName = req.body.newFoodName;
+  const id = req.body.id;
+
+  try {
+    await FoodModel.findById(id, (err, updatedFood) => {
+      updatedFood.foodName = newFoodName;
+      updatedFood.save();
+      res.send("update");
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.listen(3001, () => {
